@@ -17,9 +17,7 @@ const showingNavigationDropdown = ref(false);
         <aside class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
             <div>
                 <div class="-mx-6 px-6 py-4">
-                    <a href="#" title="home">
-                        <img src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg" class="w-32" alt="tailus logo">
-                    </a>
+                 {{$page.props.auth.user.name}}
                 </div>
 
 
@@ -60,6 +58,15 @@ const showingNavigationDropdown = ref(false);
                                 <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
                             </svg>
                             <span class="group-hover:text-gray-700">Permissions</span>
+                        </SidebarLink>
+                    </li>
+                    <li>
+                        <SidebarLink :href="route('posts.index')" :active="route().current('posts.index')">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                                <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                            </svg>
+                            <span class="group-hover:text-gray-700">Posts</span>
                         </SidebarLink>
                     </li>
                 </ul>
