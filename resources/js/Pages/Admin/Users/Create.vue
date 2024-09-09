@@ -6,13 +6,23 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
+import VueMultiselect from "vue-multiselect";
 
-
+const props = defineProps({
+    roles:{
+        type: Array
+    },
+    permissions:{
+        type: Array
+    }
+})
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    roles:[],
+    permissions:[]
 });
 
 const submit = () => {
@@ -95,6 +105,34 @@ const submit = () => {
 
                         <InputError class="mt-2" :message="form.errors.password_confirmation" />
                     </div>
+                    <div class="mt-4">
+                        <InputLabel for="roles" value="Roles"/>
+
+                        <VueMultiselect
+                            v-model="form.roles"
+                            :options="roles"
+                            :multiple="true"
+                            :close-on-select="true"
+                            placeholder="Select Roles"
+                            label="name"
+                            track-by="id"
+                        />
+                    </div>
+
+                    <div class="mt-4">
+                        <InputLabel for="permissions" value="Permissions"/>
+
+                        <VueMultiselect
+                            v-model="form.permissions"
+                            :options="permissions"
+                            :multiple="true"
+                            :close-on-select="true"
+                            placeholder="Select Permissions
+"
+                            label="name"
+                            track-by="id"
+                        />
+                    </div>
 
                     <div class="flex items-center mt-4">
 
@@ -110,4 +148,5 @@ const submit = () => {
 
     </AdminAuthenticatedLayout>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 

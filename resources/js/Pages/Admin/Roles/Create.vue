@@ -6,10 +6,16 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
+import VueMultiselect from "vue-multiselect";
+
+defineProps({
+    permissions: Array
+})
 
 
 const form = useForm({
     name: '',
+    permissions:[]
 });
 
 
@@ -27,7 +33,7 @@ const form = useForm({
             <div class="mt-6 w-full mx-auto bg-slate-100 shadow-lg rounded-lg p-4">
                 <h1 class="text-2xl p-4">Create New Role</h1>
                 <form @submit.prevent="form.post(route('roles.store'))">
-                    <div>
+                    <div class="mt-4">
                         <InputLabel for="name" value="Name"/>
 
                         <TextInput
@@ -43,6 +49,19 @@ const form = useForm({
                         <InputError class="mt-2" :message="form.errors.name"/>
                     </div>
 
+                    <div class="mt-4">
+                        <InputLabel for="permissions" value="Permissions"/>
+
+                        <VueMultiselect
+                            v-model="form.permissions"
+                            :options="permissions"
+                            :multiple="true"
+                            :close-on-select="true"
+                            placeholder="Select Permissions"
+                            label="name"
+                            track-by="id"
+                        />
+                    </div>
 
                     <div class="flex items-center mt-4">
 
@@ -59,3 +78,4 @@ const form = useForm({
     </AdminAuthenticatedLayout>
 </template>
 
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
