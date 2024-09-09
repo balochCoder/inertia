@@ -1,12 +1,33 @@
 <script setup>
-import {Head, Link} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import AdminAuthenticatedLayout from "@/Layouts/AdminAuthenticatedLayout.vue";
 import Table from "@/Components/Table.vue";
 import TableRow from "@/Components/TableRow.vue";
 import TableHeaderCell from "@/Components/TableHeaderCell.vue";
 import TableDataCell from "@/Components/TableDataCell.vue";
+import {ref} from "vue";
+import Modal from "@/Components/Modal.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineProps(['users'])
+
+const form = useForm({})
+
+const showConfirmDeleteUserModal = ref(false)
+const confirmDeleteUser = () => {
+    showConfirmDeleteUserModal.value = true
+}
+
+const closeModal = () => {
+    showConfirmDeleteUserModal.value = false
+}
+const deleteUser = (id) => {
+    form.delete(route('users.destroy', id),{
+        onSuccess:() => closeModal()
+    })
+}
+
 </script>
 
 <template>
@@ -14,8 +35,10 @@ defineProps(['users'])
     <AdminAuthenticatedLayout>
         <div class="max-w-7xl mx-auto py-4">
             <div class="flex justify-between">
-            <h1>Users</h1>
-            <Link :href="route('users.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New User</Link>
+                <h1>Users</h1>
+                <Link :href="route('users.create')"
+                      class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New User
+                </Link>
             </div>
             <div class="mt-6">
                 <Table>
@@ -37,18 +60,39 @@ defineProps(['users'])
                     <template #default>
                         <TableRow :key="user.id" v-for="user in users" class="border-b">
                             <TableDataCell>
-                                {{user.id}}
+                                {{ user.id }}
                             </TableDataCell>
                             <TableDataCell>
-                                {{user.name}}
+                                {{ user.name }}
                             </TableDataCell>
                             <TableDataCell>
-                                {{user.email}}
+                                {{ user.email }}
                             </TableDataCell>
                             <TableDataCell class="space-x-2">
-                                <Link :href="route('users.edit', user.id)" class="text-green-400 hover:text-green-600">Edit</Link>
+                                <Link :href="route('users.edit', user.id)" class="text-green-400 hover:text-green-600">
+                                    Edit
+                                </Link>
 
-                                <Link :href="route('users.destroy', user.id)" class="text-red-400 hover:text-red-600" method="DELETE" as="button">Delete</Link>
+                                <button
+                                    @click="confirmDeleteUser"
+                                    class="text-red-400 hover:text-red-600"
+                                >
+                                    Delete
+                                </button>
+                                <Modal :show="showConfirmDeleteUserModal"
+                                       @close="closeModal"
+                                >
+                                    <div class="p-6">
+                                        <h2 class="text-lg font-semibold text-slate-800">Are you sure to delete this
+                                            user?</h2>
+                                        <div class="mt-6 flex space-x-4 text-slate-800">
+                                            <DangerButton @click="$event=> deleteUser(user.id)">Delete</DangerButton>
+                                            <SecondaryButton @click="closeModal">
+                                                Cancel
+                                            </SecondaryButton>
+                                        </div>
+                                    </div>
+                                </Modal>
                             </TableDataCell>
                         </TableRow>
                     </template>
