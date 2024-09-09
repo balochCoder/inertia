@@ -1,14 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import SidebarLink from "@/Components/SidebarLink.vue";
+import {usePermission} from "@/Composables/permissions.js";
 
 const showingNavigationDropdown = ref(false);
+const {hasRole} = usePermission()
 </script>
 
 <template>
@@ -33,33 +30,35 @@ const showingNavigationDropdown = ref(false);
                             <span class="-mr-1 font-medium">Dashboard</span>
                         </SidebarLink>
                     </li>
-                    <li>
-                        <SidebarLink :href="route('users.index')" :active="route().current('users.index')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path class="fill-current text-gray-300 group-hover:text-cyan-300" fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd" />
-                                <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
-                            </svg>
-                            <span class="group-hover:text-gray-700">Users</span>
-                        </SidebarLink>
-                    </li>
-                    <li>
-                        <SidebarLink :href="route('roles.index')" :active="route().current('roles.index')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd" />
-                                <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
-                            </svg>
-                            <span class="group-hover:text-gray-700">Roles</span>
-                        </SidebarLink>
-                    </li>
-                    <li>
-                        <SidebarLink :href="route('permissions.index')" :active="route().current('permissions.index')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                                <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                            </svg>
-                            <span class="group-hover:text-gray-700">Permissions</span>
-                        </SidebarLink>
-                    </li>
+                    <template v-if="hasRole('admin')">
+                        <li>
+                            <SidebarLink :href="route('users.index')" :active="route().current('users.index')">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path class="fill-current text-gray-300 group-hover:text-cyan-300" fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd" />
+                                    <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
+                                </svg>
+                                <span class="group-hover:text-gray-700">Users</span>
+                            </SidebarLink>
+                        </li>
+                        <li>
+                            <SidebarLink :href="route('roles.index')" :active="route().current('roles.index')">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd" />
+                                    <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
+                                </svg>
+                                <span class="group-hover:text-gray-700">Roles</span>
+                            </SidebarLink>
+                        </li>
+                        <li>
+                            <SidebarLink :href="route('permissions.index')" :active="route().current('permissions.index')">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                                    <path class="fill-current text-gray-300 group-hover:text-cyan-300" d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                                </svg>
+                                <span class="group-hover:text-gray-700">Permissions</span>
+                            </SidebarLink>
+                        </li>
+                    </template>
                     <li>
                         <SidebarLink :href="route('posts.index')" :active="route().current('posts.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

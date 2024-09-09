@@ -9,7 +9,9 @@ import {ref} from "vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Modal from "@/Components/Modal.vue";
+import {usePermission} from "@/Composables/permissions.js";
 
+const {hasPermission} = usePermission();
 defineProps(['posts'])
 
 const form = useForm({})
@@ -35,7 +37,9 @@ const deletePost = (id) => {
         <div class="max-w-7xl mx-auto py-4">
             <div class="flex justify-between">
                 <h1>Posts</h1>
-                <Link :href="route('posts.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Post</Link>
+               <template v-if="hasPermission('create post')">
+                 <Link :href="route('posts.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">New Post</Link>
+               </template>
             </div>
             <div class="mt-6">
                 <Table>
@@ -60,14 +64,17 @@ const deletePost = (id) => {
                                 {{post.title}}
                             </TableDataCell>
                             <TableDataCell class="space-x-2">
+                              <template v-if="hasPermission('update post')">
                                 <Link :href="route('posts.edit', post.id)" class="text-green-400 hover:text-green-600">Edit</Link>
-
+                              </template>
+                              <template v-if="hasPermission('delete post')">
                                 <button
                                     @click="confirmDeletePost"
                                     class="text-red-400 hover:text-red-600"
                                 >
                                     Delete
                                 </button>
+                              </template>
                                 <Modal :show="showConfirmDeletePostModal"
                                        @close="closeModal"
                                 >

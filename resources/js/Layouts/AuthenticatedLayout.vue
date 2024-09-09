@@ -10,7 +10,7 @@ import {usePermission} from "@/Composables/permissions.js";
 
 const showingNavigationDropdown = ref(false);
 
-const {hasRole} = usePermission();
+const {hasRole, hasRoles} = usePermission();
 </script>
 
 <template>
@@ -40,7 +40,8 @@ const {hasRole} = usePermission();
                                     Admin
                                 </NavLink>
                                 <NavLink :href="route('posts.index')" :active="route().current('posts.index')"
-                                         v-if="hasRole('admin')">
+                                         v-if="hasRoles(['admin','moderator','writer'])"
+                                >
                                     Posts
                                 </NavLink>
                             </div>

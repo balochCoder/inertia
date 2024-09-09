@@ -17,13 +17,19 @@ class PostController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->user()->cannot('create', Post::class)) {
+            abort(403);
+        }
         return Inertia::render('Admin/Posts/Create');
     }
 
     public function store(CreatePostRequest $request)
     {
+        if ($request->user()->cannot('create', Post::class)) {
+            abort(403);
+        }
         Post::create($request->validated());
         return to_route('posts.index');
     }
@@ -35,6 +41,9 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
+        if ($request->user()->cannot('update', Post::class)) {
+            abort(403);
+        }
         return Inertia::render('Admin/Posts/Edit', [
             'post' => PostResource::make($post)
         ]);
@@ -42,6 +51,9 @@ class PostController extends Controller
 
     public function update(CreatePostRequest $request, Post $post)
     {
+        if ($request->user()->cannot('update', Post::class)) {
+            abort(403);
+        }
         $post->update($request->validated());
         return to_route('posts.index');
     }
